@@ -1,0 +1,20 @@
+package Pages;
+
+import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
+
+import java.time.Duration;
+
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$x;
+
+public class HomePage {
+    private static final SelenideElement UPLOAD_DOCUMENT_BUTTON = $x("//button/span[text()='Завантажити'] ");
+
+    @Step("Клікнути на кнопку завантажити")
+    public HomePage clickUploadButton(){
+        UPLOAD_DOCUMENT_BUTTON.should(visible, Duration.ofSeconds(10)).click();
+        return this;
+    }
+
+}
