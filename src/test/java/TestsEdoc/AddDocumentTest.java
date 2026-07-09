@@ -5,7 +5,7 @@ import io.qameta.allure.SeverityLevel;
 import org.junit.jupiter.api.*;
 
 
-public class LoginTest extends BaseTest{
+public class AddDocumentTest extends BaseTest{
 
     @BeforeEach
     public void beforeTest(){

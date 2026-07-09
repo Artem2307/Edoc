@@ -15,7 +15,7 @@ import static com.codeborne.selenide.Selenide.$x;
 public class UploadDocumentPage {
     private static final SelenideElement TYPE_DOCUMENT_BUTTON = $x("//button[@aria-label='Open']");
     private static final ElementsCollection TYPES_COLLECTIONS = $$x("//button//span");
-    private static final SelenideElement FILE_INPUT = $x("//div[2]//div[@role='presentation']//input[@type='file']");
+    public static final SelenideElement FILE_INPUT = $x("//div[2]//div[@role='presentation']//input[@type='file']");
     private static final SelenideElement SAVE_BUTTON = $x("//button[text()='Зберегти']");
 
     @Step("Завантажити документ с такими параметрами як Тип документу: {type} і файл {fileName}")
