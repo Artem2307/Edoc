@@ -11,6 +11,9 @@ public class AddDocumentTest extends BaseTest{
     public void beforeTest(){
         loginPage.login(properties.getPropValues("Login")
                 ,properties.getPropValues("Password"));
+
+        accountSelectionPage
+                .selectAccount("3672906277");
     }
 
     @Test

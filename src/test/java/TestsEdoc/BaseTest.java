@@ -1,9 +1,6 @@
 package TestsEdoc;
 
-import Pages.EditDocumentPage;
-import Pages.HomePage;
-import Pages.LoginPage;
-import Pages.UploadDocumentPage;
+import Pages.*;
 import Settings.PropertyReader;
 import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.*;
@@ -17,6 +14,7 @@ public class BaseTest {
     public static HomePage homePage = new HomePage();
     public static PropertyReader properties = new PropertyReader();
     public static EditDocumentPage editDocumentPage = new EditDocumentPage();
+    public static AccountSelectionPage accountSelectionPage = new AccountSelectionPage();
 
     @BeforeAll
     public static void setUp(){
