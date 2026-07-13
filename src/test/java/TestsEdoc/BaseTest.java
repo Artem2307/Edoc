@@ -15,6 +15,7 @@ public class BaseTest {
     public static PropertyReader properties = new PropertyReader();
     public static EditDocumentPage editDocumentPage = new EditDocumentPage();
     public static AccountSelectionPage accountSelectionPage = new AccountSelectionPage();
+    public static DocumentPage documentPage = new DocumentPage();
 
     @BeforeAll
     public static void setUp(){
