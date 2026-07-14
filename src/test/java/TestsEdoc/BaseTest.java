@@ -16,6 +16,7 @@ public class BaseTest {
     public static EditDocumentPage editDocumentPage = new EditDocumentPage();
     public static AccountSelectionPage accountSelectionPage = new AccountSelectionPage();
     public static DocumentPage documentPage = new DocumentPage();
+    public static SignDocumentPage signDocumentPage = new SignDocumentPage();
 
     @BeforeAll
     public static void setUp(){
