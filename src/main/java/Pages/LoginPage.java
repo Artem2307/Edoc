@@ -30,13 +30,12 @@ public class LoginPage {
     }
 
     @Step("Вхід через КЕП")
-    public LoginPage loginQES(String fileName){
+    public LoginPage loginQES(String fileName,String password){
         QES_BUTTON.should(visible,Duration.ofSeconds(10)).click();
         Selenide.sleep(1000);
         File file = new File("src/main/resources/files/" + fileName);
         FILE_INPUT.uploadFile(file);
-        PropertyReader propertyReader = new PropertyReader();
-        PASSWORD_QES_STRING.should(visible,Duration.ofSeconds(10)).sendKeys(propertyReader.getPropValues("password"));
+        PASSWORD_QES_STRING.should(visible,Duration.ofSeconds(10)).sendKeys(password);
         SIGN_IN_QES_BUTTON.should(visible,Duration.ofSeconds(10)).click();
         return this;
     }

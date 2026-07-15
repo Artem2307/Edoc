@@ -12,6 +12,6 @@ public class LoginQES extends BaseTest{
     @DisplayName("Сценарій 2: Вхід в аккаунт через КЕП")
     public void test() {
         loginPage
-                .loginQES("pb_36729062772314321431243124312431243412.jks");
+                .loginQES("pb_36729062772314321431243124312431243412.jks",properties.getPropValues("Password"));
     }
 }

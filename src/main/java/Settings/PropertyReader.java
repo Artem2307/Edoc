@@ -17,15 +17,27 @@ public class PropertyReader {
     @SneakyThrows
     public String getPropValues(String propertyName) {
         Properties prop = new Properties();
-        String propFileName = "config.properties";
-        inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
-        Optional.of(inputStream);
-        try {
+
+        try (InputStream inputStream =
+                     getClass().getClassLoader().getResourceAsStream("config.properties")) {
+
+            if (inputStream == null) {
+                throw new RuntimeException("config.properties not found");
+            }
+
             prop.load(inputStream);
+
+            String value = prop.getProperty(propertyName);
+
+            if (value == null) {
+                throw new IllegalArgumentException(
+                        "Property '" + propertyName + "' not found. Available keys: " + prop.keySet()
+                );
+            }
+
+            return value;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        result = prop.getProperty(propertyName);
-        return result;
     }
 }

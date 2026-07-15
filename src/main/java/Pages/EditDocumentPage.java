@@ -22,7 +22,7 @@ public class EditDocumentPage {
 
     @Step("Натисунути підписати документ")
     public EditDocumentPage SignDocumentButtonClick(){
-
+        SING_DOCUMENT_BUTTON.should(visible, Duration.ofSeconds(10)).click();
         return this;
     }
 }

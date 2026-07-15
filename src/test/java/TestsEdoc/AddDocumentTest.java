@@ -27,8 +27,11 @@ public class AddDocumentTest extends BaseTest{
                 .uploadDocument("Авансовий звіт","pdf-auto.pdf")
                 .clickSaveButton();
 
+        editDocumentPage
+                .SignDocumentButtonClick();
+
         signDocumentPage
-                .selectSigningOptions("Підпис КЕП","pb_36729062772314321431243124312431243412.jks");
+                .selectSigningOptions("Підпис КЕП","pb_36729062772314321431243124312431243412.jks",properties.getPropValues("Password"));
     }
 
     @AfterEach()
