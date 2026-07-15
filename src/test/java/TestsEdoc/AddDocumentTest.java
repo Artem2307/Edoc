@@ -18,7 +18,7 @@ public class AddDocumentTest extends BaseTest{
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Сценарій 1: Завантаження і видалення документа")
+    @DisplayName("Сценарій 1: Завантаження,підпис, видалення документа")
     public void test() {
         homePage
                 .clickUploadButton();
