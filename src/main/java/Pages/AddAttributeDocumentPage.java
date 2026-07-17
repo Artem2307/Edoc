@@ -11,30 +11,29 @@ import java.time.Duration;
 import static com.codeborne.selenide.Selenide.$$x;
 import static com.codeborne.selenide.Selenide.$x;
 
-public class RequiredAttributesPage {
-    private static final SelenideElement ADD_ATTRIBUTE_BUTTON = $x("//button[@class='sc-iIPlFl difteE']");
-    private static final SelenideElement TYPE_DOCUMENT_BUTTON = $x("//div/input[@type='text']");
-    private static final ElementsCollection TYPE_DOCUMENTS = $$x("//button[@type='button']");
-    private static final SelenideElement SELECT_ATTRIBUTE = $x("//span[text()='Додати атрибут']");
-    private static final ElementsCollection ATTRIBUTES = $$x("//span");
+public class AddAttributeDocumentPage {
+    private static final SelenideElement ADD_ATTRIBUTE_BUTTON = $x("//button[@class='sc-iIPlFl gFMDMV']");
+    private static final SelenideElement NAME_ATTRIBUTE = $x("//input[@class='U5jLn3WZrO7Mymsndgxe']");
+    private static final SelenideElement TYPE_ATTRIBUTE = $x("//div//button[@class='U5jLn3WZrO7Mymsndgxe']");
     private static final SelenideElement SAVE_BUTTON = $x("//button[text()='Зберегти']");
-    private static final ElementsCollection ATTRIBUTE_NAMES = $$x("//div/div/div/button//div");
+    private static final ElementsCollection NAME_TYPE_ATTRIBUTE = $$x("//li//button[@type='button']");
+    private static final ElementsCollection ATTRIBUTE_NAMES = $$x("//div/div/div/div[1]/span");
     private static final ElementsCollection DELETE_BUTTONS = $$x("//div/div/div/button");
     private static final SelenideElement DELETE_BUTTONS_POP_UP = $x("//button[text()='Видалити']");
 
     @Step("Додати атрубут {type} + {attribute}")
-    public RequiredAttributesPage addAttribute(String type,String attribute){
+    public AddAttributeDocumentPage addAttribute(String name,String attribute){
         ADD_ATTRIBUTE_BUTTON.should(Condition.visible, Duration.ofSeconds(10)).click();
-        TYPE_DOCUMENT_BUTTON.should(Condition.visible, Duration.ofSeconds(10)).click();
-        TYPE_DOCUMENTS.filter(Condition.text(type)).first().click();
-        SELECT_ATTRIBUTE.should(Condition.visible, Duration.ofSeconds(10)).click();
-        ATTRIBUTES.filter(Condition.text(attribute)).first().click();
+        NAME_ATTRIBUTE.should(Condition.visible, Duration.ofSeconds(10)).sendKeys(name);
+        TYPE_ATTRIBUTE.should(Condition.visible, Duration.ofSeconds(10)).click();
+        NAME_TYPE_ATTRIBUTE.filter(Condition.text(attribute)).first().click();
         SAVE_BUTTON.should(Condition.visible, Duration.ofSeconds(10)).click();
         return this;
     }
 
+
     @Step("Видалити атрибут {attribute}")
-    public RequiredAttributesPage deleteAttribute(String attribute) {
+    public AddAttributeDocumentPage deleteAttribute(String attribute) {
         Selenide.sleep(3000);
         for (int i = 0; i < ATTRIBUTE_NAMES.size(); i++) {
             if (ATTRIBUTE_NAMES.get(i).getText().trim().equals(attribute)) {
@@ -49,5 +48,4 @@ public class RequiredAttributesPage {
 
         throw new AssertionError("Атрибут '" + attribute + "' не знайдено.");
     }
-
 }
