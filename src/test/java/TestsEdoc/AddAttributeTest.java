@@ -9,14 +9,6 @@ import org.junit.jupiter.api.Test;
 
 
 public class AddAttributeTest extends BaseTest{
-    @BeforeEach
-    public void beforeTest(){
-        loginPage.login(properties.getPropValues("Login")
-                ,properties.getPropValues("Password"));
-
-        accountSelectionPage
-                .selectAccount("45664002");
-    }
 
     @Test
     @Severity(SeverityLevel.CRITICAL)

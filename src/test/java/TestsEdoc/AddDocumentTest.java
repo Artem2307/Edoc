@@ -7,15 +7,6 @@ import org.junit.jupiter.api.*;
 
 public class AddDocumentTest extends BaseTest{
 
-    @BeforeEach
-    public void beforeTest(){
-        loginPage.login(properties.getPropValues("Login")
-                ,properties.getPropValues("Password"));
-
-        accountSelectionPage
-                .selectAccount("3672906277");
-    }
-
     @Test
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Сценарій 1: Завантаження,підпис, видалення документа")

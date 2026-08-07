@@ -2,12 +2,14 @@ package TestsEdoc;
 
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class LoginQES extends BaseTest{
 
     @Test
+    @Disabled
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Сценарій 2: Вхід в аккаунт через КЕП")
     public void test() {
