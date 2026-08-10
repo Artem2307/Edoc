@@ -14,6 +14,9 @@ public class AddAttributeTest extends BaseTest{
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Сценарій 3: Додати обов'язковий атрибут і видалити")
     public void addAttribute() {
+        accountSelectionPage
+                .selectAccount("45664002");
+
         homePage
                 .selectSection("Обов’язкові атрибути");
 

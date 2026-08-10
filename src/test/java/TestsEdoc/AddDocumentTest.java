@@ -11,6 +11,9 @@ public class AddDocumentTest extends BaseTest{
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Сценарій 1: Завантаження,підпис, видалення документа")
     public void addDocument() {
+        accountSelectionPage
+                .selectAccount("3672906277");
+
         homePage
                 .clickUploadButton();
 
