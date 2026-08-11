@@ -19,6 +19,7 @@ public class BaseTest {
     public static SignDocumentPage signDocumentPage = new SignDocumentPage();
     public static EditDocumentInformsPage editDocumentInformsPage = new EditDocumentInformsPage();
     public static RequiredAttributesPage requiredAttributesPage = new RequiredAttributesPage();
+    public static AddAttributeDocumentPage addAttributeDocumentPage = new AddAttributeDocumentPage();
 
     @BeforeAll
     public static void setUp(){

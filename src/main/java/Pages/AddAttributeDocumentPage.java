@@ -12,7 +12,7 @@ import static com.codeborne.selenide.Selenide.$$x;
 import static com.codeborne.selenide.Selenide.$x;
 
 public class AddAttributeDocumentPage {
-    private static final SelenideElement ADD_ATTRIBUTE_BUTTON = $x("//button[@class='sc-iIPlFl gFMDMV']");
+    private static final SelenideElement ADD_ATTRIBUTE_BUTTON = $x("//div[2]/button");
     private static final SelenideElement NAME_ATTRIBUTE = $x("//input[@class='U5jLn3WZrO7Mymsndgxe']");
     private static final SelenideElement TYPE_ATTRIBUTE = $x("//div//button[@class='U5jLn3WZrO7Mymsndgxe']");
     private static final SelenideElement SAVE_BUTTON = $x("//button[text()='Зберегти']");
