@@ -24,6 +24,8 @@ public class AddDocumentTest extends BaseTest{
         editDocumentPage
                 .SignDocumentButtonClick();
 
+        editDocumentInformsPage
+                .sendNumberDocument("324324");
         signDocumentPage
                 .selectSigningOptions("Підпис КЕП","pb_36729062772314321431243124312431243412.jks",properties.getPropValues("Password"));
     }

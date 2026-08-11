@@ -17,7 +17,7 @@ public class RequiredAttributesPage {
     private static final ElementsCollection TYPE_DOCUMENTS = $$x("//button[@type='button']");
     private static final SelenideElement SELECT_ATTRIBUTE = $x("//span[text()='Додати атрибут']");
     private static final ElementsCollection ATTRIBUTES = $$x("//span");
-    private static final SelenideElement SAVE_BUTTON = $x("//button[text()='Зберегти']");
+    public static final SelenideElement SAVE_BUTTON = $x("//button[text()='Зберегти']");
     private static final ElementsCollection ATTRIBUTE_NAMES = $$x("//div/div/div/button//div");
     private static final ElementsCollection DELETE_BUTTONS = $$x("//div/div/div/button");
     private static final SelenideElement DELETE_BUTTONS_POP_UP = $x("//button[text()='Видалити']");

@@ -3,6 +3,7 @@ package Pages;
 import Settings.PropertyReader;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
 import io.qameta.allure.Step;
 
 import java.io.File;
@@ -27,6 +28,7 @@ public class SignDocumentPage {
 
         PASSWORD_QES_STRING.should(visible,Duration.ofSeconds(10)).sendKeys(password);
         SIGN_IN_QES_BUTTON.should(visible,Duration.ofSeconds(10)).click();
+        Selenide.sleep(3000);
         return this;
     }
 }
