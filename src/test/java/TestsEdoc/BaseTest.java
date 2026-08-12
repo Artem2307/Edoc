@@ -20,7 +20,7 @@ public class BaseTest {
     public static EditDocumentInformsPage editDocumentInformsPage = new EditDocumentInformsPage();
     public static RequiredAttributesPage requiredAttributesPage = new RequiredAttributesPage();
     public static AddAttributeDocumentPage addAttributeDocumentPage = new AddAttributeDocumentPage();
-
+    public static AddContactPage addContactPage = new AddContactPage();
     @BeforeAll
     public static void setUp(){
         selenideSetting();
