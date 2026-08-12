@@ -18,7 +18,7 @@ public class AddAttributeDocumentPage {
     private static final SelenideElement SAVE_BUTTON = $x("//button[text()='Зберегти']");
     private static final ElementsCollection NAME_TYPE_ATTRIBUTE = $$x("//li//button[@type='button']");
     private static final ElementsCollection ATTRIBUTE_NAMES = $$x("//div/div/div/div[1]/span");
-    private static final ElementsCollection DELETE_BUTTONS = $$x("//div/div/div/button");
+    private static final ElementsCollection DELETE_BUTTONS = $$x("//div//div//div//div//button[2]");
     private static final SelenideElement DELETE_BUTTONS_POP_UP = $x("//button[text()='Видалити']");
 
     @Step("Додати атрубут {type} + {attribute}")
