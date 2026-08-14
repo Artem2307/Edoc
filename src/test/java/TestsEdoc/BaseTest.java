@@ -21,6 +21,7 @@ public class BaseTest {
     public static RequiredAttributesPage requiredAttributesPage = new RequiredAttributesPage();
     public static AddAttributeDocumentPage addAttributeDocumentPage = new AddAttributeDocumentPage();
     public static AddContactPage addContactPage = new AddContactPage();
+    public static DocumentsCollectionPage documentsCollectionPage = new DocumentsCollectionPage();
     @BeforeAll
     public static void setUp(){
         selenideSetting();
