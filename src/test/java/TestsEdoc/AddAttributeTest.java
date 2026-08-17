@@ -21,7 +21,7 @@ public class AddAttributeTest extends BaseTest{
                 .selectSection("Обов’язкові атрибути");
 
         requiredAttributesPage
-                .addAttribute("Авансовий звіт","Date");
+                .addAttribute("Авансовий звіт","Сума");
     }
 
     @AfterEach()
