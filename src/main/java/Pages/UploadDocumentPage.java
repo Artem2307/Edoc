@@ -17,6 +17,9 @@ public class UploadDocumentPage {
     private static final ElementsCollection TYPES_COLLECTIONS = $$x("//button//span");
     public static final SelenideElement FILE_INPUT = $x("//div[2]//div[@role='presentation']//input[@type='file']");
     private static final SelenideElement SAVE_BUTTON = $x("//button[text()='Зберегти']");
+    private static final SelenideElement ERROR_MESSAGE_DUPLICATE = $x("//div/strong[text()='Повторне завантаження. ']");
+
+
 
     @Step("Завантажити документ с такими параметрами як Тип документу: {type} і файл {fileName}")
     public UploadDocumentPage uploadDocument(String type,String fileName){
@@ -30,9 +33,22 @@ public class UploadDocumentPage {
         return this;
     }
 
+    @Step("Завантажити документ {fileName}")
+    public UploadDocumentPage uploadDocument(String fileName){
+        File file = new File("src/main/resources/files/" + fileName);
+        FILE_INPUT.uploadFile(file);
+        return this;
+    }
+
     @Step("Натиснути кнопку зберегти")
     public UploadDocumentPage clickSaveButton(){
         SAVE_BUTTON.should(visible, Duration.ofSeconds(10)).click();
+        return this;
+    }
+
+    @Step("Повідомлення про дублікат файлу відображається")
+    public UploadDocumentPage isVisibleDuplicateFile(){
+        ERROR_MESSAGE_DUPLICATE.should(visible, Duration.ofSeconds(10));
         return this;
     }
 }
