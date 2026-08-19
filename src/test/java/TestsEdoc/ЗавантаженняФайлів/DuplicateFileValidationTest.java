@@ -1,11 +1,12 @@
-package TestsEdoc;
+package TestsEdoc.ЗавантаженняФайлів;
 
+import TestsEdoc.BaseTest;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class DuplicateFileValidationTest extends BaseTest{
+public class DuplicateFileValidationTest extends BaseTest {
 
     @Test
     @Severity(SeverityLevel.CRITICAL)

@@ -16,6 +16,8 @@ public class EditDocumentPage {
     private static final SelenideElement SING_DOCUMENT_BUTTON = $x(" //*[@id='bar']");
     private static final SelenideElement ARCHIVE_BUTTON = $x("//main/section/div[1]/div[1]/span[1]/button");
     private static final SelenideElement ARCHIVE_POP_UP_BUTTON = $x("//button[text()='Архівувати']");
+    private static final SelenideElement SING_DOCUMENT_SUCCESS = $x("//div[text()=\"Електронний підпис\"]");
+    private static final SelenideElement SING_DOCUMENT_ERROR = $x("//p[text()=\"Неправильно введений пароль або ключ пошкоджений. Перевірте дані і введіть пароль ще раз\"]");
 
     @Step("Видалити документ")
     public EditDocumentPage deleteDocument(){
@@ -34,6 +36,17 @@ public class EditDocumentPage {
     public EditDocumentPage arсhiveButtonClick(){
         ARCHIVE_BUTTON.should(visible, Duration.ofSeconds(10)).click();
         ARCHIVE_POP_UP_BUTTON.should(visible, Duration.ofSeconds(10)).click();
+        return this;
+    }
+
+    @Step("Помилка підписання")
+    public EditDocumentPage isVisibleDocumentSigningError(){
+        SING_DOCUMENT_ERROR.should(visible, Duration.ofSeconds(10));
+        return this;
+    }
+    @Step("Успішне підписання")
+    public EditDocumentPage isVisibleDocumentSigningSuccess(){
+        SING_DOCUMENT_ERROR.should(visible, Duration.ofSeconds(10));
         return this;
     }
 }
