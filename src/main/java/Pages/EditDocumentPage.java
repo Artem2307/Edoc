@@ -46,7 +46,7 @@ public class EditDocumentPage {
     }
     @Step("Успішне підписання")
     public EditDocumentPage isVisibleDocumentSigningSuccess(){
-        SING_DOCUMENT_ERROR.should(visible, Duration.ofSeconds(10));
+        SING_DOCUMENT_SUCCESS.should(visible, Duration.ofSeconds(10));
         return this;
     }
 }
