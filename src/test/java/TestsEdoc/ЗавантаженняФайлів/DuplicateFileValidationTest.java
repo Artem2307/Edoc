@@ -10,7 +10,7 @@ public class DuplicateFileValidationTest extends BaseTest {
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Сценарій 7: Завантаження,підпис, видалення документа")
+    @DisplayName("Сценарій 7: Завантаження дубліката документа")
     public void duplicateFileValidation() {
         accountSelectionPage
                 .selectAccount("3672906277");
