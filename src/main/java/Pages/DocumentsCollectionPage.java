@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selenide.$x;
 
 public class DocumentsCollectionPage {
     private static final ElementsCollection DOCUMENTS_COLLECTION = $$x("//p");
-    private static final ElementsCollection DOCUMENTS_NUMBER_COLLECTION = $$x("//div[@col-id=\"number\"]");
+    private static final ElementsCollection DOCUMENTS_NUMBER_COLLECTION = $$x("//p");
     private static final SelenideElement SEARCH_STRING = $x("//input[@placeholder=\"Пошук за документом, компанією, контрагентом..\"]");
 
     @Step("Пошук документа {0}")
