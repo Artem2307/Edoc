@@ -1,6 +1,7 @@
 package TestsEdoc.ЗавантаженняФайлів;
 
 import TestsEdoc.BaseTest;
+import com.codeborne.selenide.Selenide;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import org.junit.jupiter.api.*;
@@ -25,6 +26,7 @@ public class AddDocumentTest extends BaseTest {
         editDocumentPage
                 .SignDocumentButtonClick();
 
+        Selenide.sleep(3000);
         editDocumentInformsPage
                 .sendNumberDocument("324324");
 
