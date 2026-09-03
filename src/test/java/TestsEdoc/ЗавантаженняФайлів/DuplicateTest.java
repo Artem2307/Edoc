@@ -22,14 +22,14 @@ public class DuplicateTest extends BaseTest {
 
         documentsCollectionPage
                 .searchDocument("pdf-auto.pdf")
-                .clickDocumentNumber("pdf-auto");
+                .clickDocument("pdf-auto");
 
         editDocumentPage
                 .deleteDocument();
 
         documentsCollectionPage
                 .searchDocument("test.pdf")
-                .clickDocumentNumber("test");
+                .clickDocument("test");
 
         editDocumentPage
                 .deleteDocument();
