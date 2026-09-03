@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selenide.$x;
 
 public class HomePage {
     private static final SelenideElement UPLOAD_DOCUMENT_BUTTON = $x("//button/span[text()='Завантажити'] ");
-    private static final ElementsCollection SECTION_COLLECTION = $$x("//span[@style='white-space: nowrap; opacity: 1;']");
+    private static final ElementsCollection SECTION_COLLECTION = $$x("//span[@style='opacity: 1;']");
 
 
     @Step("Клікнути на кнопку завантажити")

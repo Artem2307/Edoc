@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Selenide.$$x;
 import static com.codeborne.selenide.Selenide.$x;
 
 public class AccountSelectionPage {
-    private static final SelenideElement OPEN_COLLECTION_ACCOUNTS_BUTTON = $x("//button/div[2]/span");
+    private static final SelenideElement OPEN_COLLECTION_ACCOUNTS_BUTTON = $x("//button/div[2]");
     private static final ElementsCollection ACCOUNTS_COLLECTION = $$x("//div[2]/p[2]");
 
    @Step("Переключитись на аккаунт {0}")
