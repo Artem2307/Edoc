@@ -29,6 +29,7 @@ public class DocumentSigningError extends BaseTest {
         editDocumentInformsPage
                 .sendNumberDocument("324324");
 
+        Selenide.sleep(3000);
         signDocumentPage
                 .selectSigningOptions("Підпис КЕП","pb_36729062772314321431243124312431243412.jks","43123412");
 
