@@ -12,7 +12,7 @@ import static com.codeborne.selenide.Selenide.$$x;
 import static com.codeborne.selenide.Selenide.$x;
 
 public class RequiredAttributesPage {
-    private static final SelenideElement ADD_ATTRIBUTE_BUTTON = $x("//*[@id=\"root\"]/main/section/div[2]/div");
+    private static final SelenideElement ADD_ATTRIBUTE_BUTTON = $x("//div[1]/div[2]/button");
     private static final SelenideElement TYPE_DOCUMENT_BUTTON = $x("//div/input[@type='text']");
     private static final ElementsCollection TYPE_DOCUMENTS = $$x("//button[@type='button']");
     private static final SelenideElement SELECT_ATTRIBUTE = $x("//span[text()='Додати атрибут']");
