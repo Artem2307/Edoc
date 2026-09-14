@@ -2,6 +2,7 @@ package Pages;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
@@ -24,6 +25,7 @@ public class HomePage {
 
     @Step("Відкрити розділ у меня {0}")
     public HomePage selectSection(String name){
+        Selenide.sleep(2000);
         SECTION_COLLECTION.filter(Condition.text(name)).first().click();
         return this;
     }
