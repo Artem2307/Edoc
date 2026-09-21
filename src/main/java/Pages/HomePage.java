@@ -23,10 +23,17 @@ public class HomePage {
         return this;
     }
 
-    @Step("Відкрити розділ у меня {0}")
+    @Step("Відкрити розділ {0}")
     public HomePage selectSection(String name){
         Selenide.sleep(2000);
         SECTION_COLLECTION.filter(Condition.text(name)).first().click();
+        return this;
+    }
+
+    @Step("Розділ {0} відсутній ")
+    public HomePage noVisibleSection(String name){
+        Selenide.sleep(3000);
+        SECTION_COLLECTION.filter(Condition.text(name)).first().shouldNot(visible);
         return this;
     }
 

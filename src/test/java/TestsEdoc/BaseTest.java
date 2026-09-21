@@ -3,6 +3,7 @@ package TestsEdoc;
 import Pages.*;
 import Settings.PropertyReader;
 import com.codeborne.selenide.Selenide;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.*;
 
 import static Settings.SelenideSetting.selenideSetting;
@@ -22,6 +23,7 @@ public class BaseTest {
     public static AddAttributeDocumentPage addAttributeDocumentPage = new AddAttributeDocumentPage();
     public static AddContactPage addContactPage = new AddContactPage();
     public static DocumentsCollectionPage documentsCollectionPage = new DocumentsCollectionPage();
+    public static AccessControlPage accessControlPage = new AccessControlPage();
     @BeforeAll
     public static void setUp(){
         selenideSetting();
