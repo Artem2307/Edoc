@@ -5,6 +5,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
+import org.openqa.selenium.devtools.v117.network.model.Request;
 
 import java.time.Duration;
 
@@ -48,6 +49,7 @@ public class RequiredAttributesPage {
         }
 
         throw new AssertionError("Атрибут '" + attribute + "' не знайдено.");
+
     }
 
 }

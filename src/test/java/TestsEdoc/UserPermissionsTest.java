@@ -81,4 +81,41 @@ public class UserPermissionsTest extends BaseTest{
         homePage
                 .selectSection("Атрибути документів");
     }
+
+    @Test
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Сценарій 13: Налаштування компанії")
+    public void UserPermissionsTest2() {
+        accountSelectionPage
+                .selectAccount("45664002");
+
+        homePage
+                .selectSection("Керування правами");
+
+        accessControlPage
+                .searchUser(email)
+                .openUser("Правдюк Артем Геннадійович")
+                .settingUser("Перегляд акаунту компанії","Редагування компанії");
+
+        accountSelectionPage
+                .selectAccount("3672906277");
+        homePage
+                .noVisibleSection("Налаштування компанії");
+
+        accountSelectionPage
+                .selectAccount("45664002");
+
+        homePage
+                .selectSection("Керування правами");
+
+        accessControlPage
+                .searchUser(email)
+                .openUser("Правдюк Артем Геннадійович")
+                .settingUser("Перегляд акаунту компанії","Редагування компанії");
+
+        accountSelectionPage
+                .selectAccount("3672906277");
+        homePage
+                .selectSection("Налаштування компанії");
+    }
 }
