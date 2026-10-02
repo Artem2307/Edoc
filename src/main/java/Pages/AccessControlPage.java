@@ -18,7 +18,7 @@ public class AccessControlPage {
     private static final ElementsCollection USERS = $$x("//div[@role=\"gridcell\"]//span");
     private static final ElementsCollection USER_SETTINGS = $$x("//span");
 
-    @Step("Пошук документа {0}")
+    @Step("Пошук користувача {0}")
     public AccessControlPage searchUser(String name){
         SEARCH_STRING.should(visible, Duration.ofSeconds(10)).clear();
         SEARCH_STRING.sendKeys(name);
