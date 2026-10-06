@@ -21,7 +21,7 @@ public class SelenideSetting {
         Configuration.browserSize = null;
 
         Configuration.browserCapabilities = new ChromeOptions()
-                .addArguments("--start-maximized");
+                .addArguments("--window-size=1920,1080");
 
 
         Selenide.open(Configuration.baseUrl);
