@@ -52,7 +52,7 @@ jobs:
           allure_report: allure-report
 
       - name: Upload Allure Report
-        if: always()
+        if: always() && github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: actions/upload-pages-artifact@v3
         with:
           path: allure-report
