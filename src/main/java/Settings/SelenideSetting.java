@@ -26,7 +26,7 @@ public class SelenideSetting {
 
         Selenide.open(Configuration.baseUrl);
 
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3OTAxNTI5NjMsImlhdCI6MTc5MDA2NjU2MywianRpIjoiZmM4YzhhMDktOGQ3Mi00YjU2LWFiNjctZTZiMGU5MjI0MDJmIiwic3ViIjoiYTIwOTM1ZGMtYzU5OC00NTY2LWI3ZGItZGYwY2QxY2Y5NDg2In0.PIMjlv-X7ZNev0kGEub85TRXzzcqvBBIGL_xFdVfZmc";
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3OTE4ODcxNTQsImlhdCI6MTc5MTI4MjM1NCwianRpIjoiNTlkZjRiYzMtZjdkYS00NmQzLWEyNDMtOTg2OTdkYzNiN2Q0Iiwic3ViIjoiYTIwOTM1ZGMtYzU5OC00NTY2LWI3ZGItZGYwY2QxY2Y5NDg2In0.ANoQGq1BaNhxqy_5y408-aY5JauhP-GLdE2IaHtHiCo";
 
         Selenide.executeJavaScript(
                 "window.localStorage.setItem('token', arguments[0]);",
