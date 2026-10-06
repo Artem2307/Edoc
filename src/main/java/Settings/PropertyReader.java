@@ -19,7 +19,7 @@ public class PropertyReader {
         Properties prop = new Properties();
 
         try (InputStream inputStream =
-                     getClass().getClassLoader().getResourceAsStream("config.properties")) {
+                     getClass().getClassLoader().getResourceAsStream("src/main/resources/сonfig.properties")) {
 
             if (inputStream == null) {
                 throw new RuntimeException("config.properties not found");
