@@ -58,6 +58,7 @@ jobs:
           path: allure-report
 
   deploy:
+    if: always()
     needs: build
     runs-on: ubuntu-latest
 
