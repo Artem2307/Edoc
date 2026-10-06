@@ -14,7 +14,7 @@ public class AccountSelectionPage {
     private static final SelenideElement OPEN_COLLECTION_ACCOUNTS_BUTTON = $x("//li[2]/button/div/div");
     private static final ElementsCollection ACCOUNTS_COLLECTION = $$x("//div[2]/p[2]");
 
-   @Step("Переключитись на аккаунт {0}")
+   @Step("Переключитись на аккаунт {0} ")
     public AccountSelectionPage selectAccount(String name){
        OPEN_COLLECTION_ACCOUNTS_BUTTON.should(Condition.visible, Duration.ofSeconds(10)).click();
        ACCOUNTS_COLLECTION.filter(Condition.text(name)).first().click();
