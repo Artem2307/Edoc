@@ -16,7 +16,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$$x;
 
 public class SignDocumentPage {
-    private static final ElementsCollection SIGNING_OPTIONS = $$x("//div//div//p");
+    private static final ElementsCollection SIGNING_OPTIONS = $$x("//button/div/h6");
 
     @Step("Підписати документ {0}")
     public SignDocumentPage selectSigningOptions(String options,String fileName,String password){

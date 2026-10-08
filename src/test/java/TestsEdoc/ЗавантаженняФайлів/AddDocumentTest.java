@@ -31,7 +31,7 @@ public class AddDocumentTest extends BaseTest {
                 .sendNumberDocument("324324");
 
         signDocumentPage
-                .selectSigningOptions("Підпис КЕП","pb_36729062772314321431243124312431243412.jks",properties.getPropValues("Password"));
+                .selectSigningOptions("Підпис КЕП","pb_36729062772314321431243124312431243412.jks",properties.getPropValues("Password.key"));
 
         editDocumentPage
                 .isVisibleDocumentSigningSuccess();
