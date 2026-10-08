@@ -1,5 +1,6 @@
 package ApiEdocTest;
 
+import api.base.ApiBaseTest.PermissionsApi;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
@@ -8,24 +9,7 @@ public class BaseApiTest {
 
     protected static final String BASE_URL = "https://edoc.dev/api";
 
-    /**
-     * Выполняет запрос GET с использованием базового URL
-     *
-     * @param endpoint Конечная точка API
-     * @param token    Токен авторизации
-     * @return Response Ответ от сервера
-     */
-    protected Response performGetRequest(String endpoint, String token) {
-        return given()
-                .baseUri(BASE_URL)
-                .basePath(endpoint)
-                .header("Authorization", "Bearer " + token)
-                .header("accept", "application/json")
-                .when()
-                .get()
-                .thenReturn();
-    }
-
+    public final PermissionsApi permissionsApi = new PermissionsApi();
     /**
      * Метод для проверки статус-кода и возврата ответа
      *

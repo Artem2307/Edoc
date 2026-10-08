@@ -1,18 +1,12 @@
 package ApiEdocTest;
 
 import api.base.ApiBaseTest.PermissionsApi;
-import api.base.ApiBaseTest.PermissionsResponse;
-import io.restassured.response.Response;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class PermissionsTest extends BaseApiTest {
 
-    private final PermissionsApi permissionsApi = new PermissionsApi();
 
     @ParameterizedTest
     @CsvSource({
@@ -23,33 +17,6 @@ public class PermissionsTest extends BaseApiTest {
     })
 
     public void testPermissions(String accountId, String token, int expectedStatus, String expectedMessage, boolean checkResult) {
-        validatePermissions(accountId, token, expectedStatus, expectedMessage, checkResult);
-    }
-
-    /**
-     * Универсальный метод для проверки успешного и ошибочного ответов API.
-     */
-    private void validatePermissions(String accountId, String token, int expectedStatus, String expectedMessage, boolean checkResult) {
-        Response response = permissionsApi.getPermissions(accountId, token);
-
-        assertStatusCode(response, expectedStatus);
-
-        if (expectedStatus == 200) {
-            // Проверяем успешный ответ
-            PermissionsResponse permissionsResponse = response.getBody().as(PermissionsResponse.class);
-            assertEquals(expectedMessage, permissionsResponse.getStatus(), "Ожидался статус: success");
-            if (checkResult) {
-                assertNotNull(permissionsResponse.getResult(), "Результат не должен быть null");
-                if (!permissionsResponse.getResult().getList().isEmpty()) {
-                    assertNotNull(permissionsResponse.getResult().getList().get(0).getId(), "ID разрешения не должен быть null");
-                }
-            }
-        } else {
-            // Для ошибок (статус не 200) проверяем сообщение об ошибке
-            String errorMessage = response.jsonPath().getString("result.message");
-            if (expectedMessage != null) {
-                assertEquals(expectedMessage, errorMessage, "Ожидалась ошибка: " + expectedMessage);
-            }
-        }
+        permissionsApi.validatePermissions(accountId, token, expectedStatus, expectedMessage, checkResult);
     }
 }
