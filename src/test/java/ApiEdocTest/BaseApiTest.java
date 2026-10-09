@@ -1,15 +1,20 @@
 package ApiEdocTest;
 
-import api.base.ApiBaseTest.PermissionsApi;
+import Settings.PropertyReader;
+import api.base.ApiBaseTest.Steps.AccountsApi;
+import api.base.ApiBaseTest.Steps.PermissionsApi;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
 
 public class BaseApiTest {
+    PropertyReader propertyReader = new PropertyReader();
+    public final String validToken = propertyReader.getPropValues("token");
 
     protected static final String BASE_URL = "https://edoc.dev/api";
 
     public final PermissionsApi permissionsApi = new PermissionsApi();
+    public final AccountsApi accountsApi = new AccountsApi();
     /**
      * Метод для проверки статус-кода и возврата ответа
      *

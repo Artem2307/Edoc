@@ -1,5 +1,6 @@
-package api.base.ApiBaseTest;
+package api.base.ApiBaseTest.Steps;
 
+import api.base.ApiBaseTest.Response.PermissionsResponse;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;

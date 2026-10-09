@@ -1,4 +1,4 @@
-package api.base.ApiBaseTest;
+package api.base.ApiBaseTest.Response;
 
 import lombok.Data;
 
