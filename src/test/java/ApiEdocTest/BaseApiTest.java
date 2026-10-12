@@ -2,6 +2,7 @@ package ApiEdocTest;
 
 import Settings.PropertyReader;
 import api.base.ApiBaseTest.Steps.AccountsApi;
+import api.base.ApiBaseTest.Steps.AttributeTypesApi;
 import api.base.ApiBaseTest.Steps.PermissionsApi;
 import io.restassured.response.Response;
 
@@ -16,6 +17,7 @@ public class BaseApiTest {
 
     public final PermissionsApi permissionsApi = new PermissionsApi();
     public final AccountsApi accountsApi = new AccountsApi();
+    public final AttributeTypesApi attributeTypesApi = new AttributeTypesApi();
     /**
      * Метод для проверки статус-кода и возврата ответа
      *
