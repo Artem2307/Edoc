@@ -9,7 +9,7 @@ import static io.restassured.RestAssured.given;
 
 public class PermissionsApi {
 
-    private static final String BASE_URL = "https://edoc.dev/api";
+    private static final String BASE_URL = "https://v2.edoc.dev/api";
 
     /**
      * Выполняет GET-запрос на получение разрешений для указанного аккаунта.

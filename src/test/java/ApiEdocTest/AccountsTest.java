@@ -12,7 +12,7 @@ import java.util.Map;
 public class AccountsTest extends BaseApiTest {
 
     @Test
-    @DisplayName("Получение списка аккаунтов с дефолтными параметрами")
+    @DisplayName("Сценарій 14: Отримання списку акаунтів з дефолтними параметрами")
     public void testGetAccountsDefault() {
         Map<String, Object> params = new HashMap<>();
         params.put("page", 0);
@@ -22,7 +22,7 @@ public class AccountsTest extends BaseApiTest {
     }
 
     @Test
-    @DisplayName("Получение списка аккаунтов с поиском и сортировкой")
+    @DisplayName("Сценарій 15: Отримання списку акаунтів з пошуком та сортуванням")
     public void testGetAccountsWithFilters() {
         Map<String, Object> params = new HashMap<>();
         params.put("page", 0);
@@ -35,12 +35,21 @@ public class AccountsTest extends BaseApiTest {
     }
 
     @ParameterizedTest
-    @DisplayName("Проверка обработки ошибок авторизации")
+    @DisplayName("Сценарій 16: Перевірка помилок авторизації при отриманні списку акаунтів")
     @CsvSource({
-            "invalid_token, 401",
-            "'', 401"
+            "invalid_token, , , 401, failure",
+            "'', , , 401, failure",
+            "VALID_TOKEN, -1, 10, 400, failure"
     })
-    public void testGetAccountsUnauthorized(String token, int expectedStatus) {
-        accountsApi.validateAccounts(token, new HashMap<>(), expectedStatus, "failure");
+    public void testGetAccountsErrors(String token, Integer page, Integer limit, int expectedStatus, String expectedStatusField) {
+        if ("VALID_TOKEN".equals(token)) {
+            token = validToken;
+        }
+        
+        Map<String, Object> params = new HashMap<>();
+        if (page != null) params.put("page", page);
+        if (limit != null) params.put("limit", limit);
+
+        accountsApi.validateAccounts(token, params, expectedStatus, expectedStatusField);
     }
 }

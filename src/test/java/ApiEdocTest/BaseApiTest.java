@@ -10,8 +10,9 @@ import static io.restassured.RestAssured.given;
 public class BaseApiTest {
     PropertyReader propertyReader = new PropertyReader();
     public final String validToken = propertyReader.getPropValues("token");
+    public final String validAccountId = propertyReader.getPropValues("accountId");
 
-    protected static final String BASE_URL = "https://edoc.dev/api";
+    protected static final String BASE_URL = "https://v2.edoc.dev/api";
 
     public final PermissionsApi permissionsApi = new PermissionsApi();
     public final AccountsApi accountsApi = new AccountsApi();

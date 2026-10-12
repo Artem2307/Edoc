@@ -9,7 +9,7 @@ public class PermissionsTest extends BaseApiTest {
 
 
     @ParameterizedTest
-    @DisplayName("Перевірка дозволів аккаунта з різними токенами та станами")
+    @DisplayName("Сценарій 17: Перевірка дозволів акаунта з різними токенами та станами")
     @CsvSource({
             "a20935dc-c598-4566-b7db-df0cd1cf9486, VALID_TOKEN, 200, success, true",
             "a20935dc-c598-4566-b7db-df0cd1cf9486, invalid_token, 401, Token expired, false",
@@ -21,6 +21,10 @@ public class PermissionsTest extends BaseApiTest {
         if ("VALID_TOKEN".equals(token)) {
             token = validToken;
         }
+        if ("VALID_accountId".equals(accountId)) {
+            accountId = validAccountId;
+        }
+
         permissionsApi.validatePermissions(accountId, token, expectedStatus, expectedMessage, checkResult);
     }
 }
