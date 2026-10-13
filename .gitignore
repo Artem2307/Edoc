@@ -36,3 +36,4 @@ build/
 
 ### Mac OS ###
 .DS_Store
+/.allure/allure-2.27.0/plugins/xray-plugin/lib/allure-jira-commons-2.27.0.jar

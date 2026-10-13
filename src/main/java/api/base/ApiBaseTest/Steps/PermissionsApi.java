@@ -42,11 +42,19 @@ public class PermissionsApi {
         if (expectedStatus == 200) {
             // Проверяем успешный ответ
             PermissionsResponse permissionsResponse = response.getBody().as(PermissionsResponse.class);
-            Assertions.assertEquals(expectedMessage, permissionsResponse.getStatus(), "Ожидался статус: success");
+            Assertions.assertEquals("success", permissionsResponse.getStatus(), "Ожидался статус: success");
+            
             if (checkResult) {
-                Assertions.assertNotNull(permissionsResponse.getResult(), "Результат не должен быть null");
-                if (!permissionsResponse.getResult().getList().isEmpty()) {
-                    Assertions.assertNotNull(permissionsResponse.getResult().getList().get(0).getId(), "ID разрешения не должен быть null");
+                PermissionsResponse.Result result = permissionsResponse.getResult();
+                Assertions.assertNotNull(result, "Результат (result) отсутствует в ответе");
+                Assertions.assertNotNull(result.getList(), "Список разрешений (result.list) отсутствует в ответе");
+                
+                if (!result.getList().isEmpty()) {
+                    for (PermissionsResponse.Result.Permission permission : result.getList()) {
+                        Assertions.assertNotNull(permission.getId(), "ID разрешения отсутствует");
+                        Assertions.assertNotNull(permission.getAlias(), "Alias разрешения отсутствует");
+                        Assertions.assertFalse(permission.getAlias().isEmpty(), "Alias разрешения не должен быть пустым");
+                    }
                 }
             }
         } else {

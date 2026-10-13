@@ -39,16 +39,18 @@ public class AttributeTypesApi {
         if (expectedStatus == 200) {
             AttributeTypesResponse attributeTypesResponse = response.getBody().as(AttributeTypesResponse.class);
             Assertions.assertEquals(expectedStatusField, attributeTypesResponse.getStatus(), "Ожидался статус в теле: " + expectedStatusField);
-            Assertions.assertNotNull(attributeTypesResponse.getResult(), "Результат не должен быть null");
-
+            
             AttributeTypesResponse.Result result = attributeTypesResponse.getResult();
-            Assertions.assertNotNull(result.getList(), "Список типов атрибутов не должен быть null");
+            Assertions.assertNotNull(result, "Результат (result) отсутствует в ответе");
+            Assertions.assertNotNull(result.getList(), "Список типов атрибутов (result.list) отсутствует в ответе");
 
             if (!result.getList().isEmpty()) {
                 for (AttributeTypesResponse.Result.AttributeType type : result.getList()) {
-                    Assertions.assertNotNull(type.getId(), "ID типа атрибута не должен быть null");
-                    Assertions.assertNotNull(type.getTitle(), "Title типа атрибута не должен быть null");
-                    Assertions.assertNotNull(type.getAlias(), "Alias типа атрибута не должен быть null");
+                    Assertions.assertNotNull(type.getId(), "ID типа атрибута отсутствует");
+                    Assertions.assertNotNull(type.getTitle(), "Title типа атрибута отсутствует");
+                    Assertions.assertNotNull(type.getAlias(), "Alias типа атрибута отсутствует");
+                    Assertions.assertFalse(type.getTitle().isEmpty(), "Title типа атрибута не должен быть пустым");
+                    Assertions.assertFalse(type.getAlias().isEmpty(), "Alias типа атрибута не должен быть пустым");
                 }
             }
         } else {

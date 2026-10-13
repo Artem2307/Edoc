@@ -42,22 +42,24 @@ public class AccountsApi {
         if (expectedStatus == 200) {
             AccountsResponse accountsResponse = response.getBody().as(AccountsResponse.class);
             Assertions.assertEquals(expectedStatusField, accountsResponse.getStatus(), "Ожидался статус в теле: " + expectedStatusField);
-            Assertions.assertNotNull(accountsResponse.getResult(), "Результат не должен быть null");
             
             AccountsResponse.Result result = accountsResponse.getResult();
-            Assertions.assertNotNull(result.getList(), "Список аккаунтов не должен быть null");
-            Assertions.assertTrue(result.getTotal() >= 0, "Total должен быть >= 0");
+            Assertions.assertNotNull(result, "Результат (result) отсутствует в ответе");
+            Assertions.assertNotNull(result.getList(), "Список аккаунтов (result.list) отсутствует в ответе");
+            Assertions.assertTrue(result.getTotal() >= 0, "Total должен быть >= 0, но было: " + result.getTotal());
 
             if (!result.getList().isEmpty()) {
                 for (AccountsResponse.Result.Account account : result.getList()) {
-                    Assertions.assertNotNull(account.getId(), "ID аккаунта не должен быть null");
-                    Assertions.assertNotNull(account.getEmail(), "Email аккаунта не должен быть null");
-                    Assertions.assertTrue(account.getEmail().contains("@"), "Email должен содержать @");
+                    Assertions.assertNotNull(account.getId(), "ID аккаунта отсутствует");
+                    Assertions.assertNotNull(account.getEmail(), "Email аккаунта отсутствует");
+                    Assertions.assertTrue(account.getEmail().contains("@"), 
+                            "Email '" + account.getEmail() + "' имеет неверный формат (отсутствует @)");
                     
                     if (account.getCompany() != null) {
                         AccountsResponse.Result.Company company = account.getCompany();
-                        Assertions.assertNotNull(company.getId(), "ID компании не должен быть null");
-                        Assertions.assertNotNull(company.getTitle(), "Title компании не должен быть null");
+                        Assertions.assertNotNull(company.getId(), "ID компании отсутствует");
+                        // У некоторых компаний title может быть пустой строкой, проверяем на null
+                        Assertions.assertNotNull(company.getTitle(), "Title компании отсутствует (null)");
                     }
                 }
             }
