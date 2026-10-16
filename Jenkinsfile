@@ -5,19 +5,19 @@ pipeline {
         choice(
             name: 'RUN_MODE',
             choices: ['ALL', 'CLASS', 'METHOD'],
-            description: 'ALL — все тесты; CLASS — класс; METHOD — метод'
+            description: 'ALL - all tests; CLASS - one class; METHOD - one method'
         )
 
         string(
             name: 'TEST_CLASS',
             defaultValue: '',
-            description: 'Имя класса, например AddDocumentTest'
+            description: 'Test class, e.g. AddDocumentTest'
         )
 
         string(
             name: 'TEST_METHOD',
             defaultValue: '',
-            description: 'Имя метода теста, например uploadDocument'
+            description: 'Test method name'
         )
     }
 
@@ -39,45 +39,35 @@ pipeline {
                     def testFilter = ''
 
                     if (params.RUN_MODE == 'CLASS') {
-                        if (!(params.TEST_CLASS ==~
-                                /[A-Za-z_$][A-Za-z0-9_$]*(\.[A-Za-z_$][A-Za-z0-9_$]*)*/)) {
-                            error 'Укажи корректное имя класса в TEST_CLASS'
+                        if (!params.TEST_CLASS?.trim()) {
+                            error 'Enter TEST_CLASS'
                         }
 
-                        testFilter = params.TEST_CLASS
+                        testFilter = params.TEST_CLASS.trim()
 
                     } else if (params.RUN_MODE == 'METHOD') {
-                        if (!(params.TEST_CLASS ==~
-                                /[A-Za-z_$][A-Za-z0-9_$]*(\.[A-Za-z_$][A-Za-z0-9_$]*)*/)) {
-                            error 'Укажи корректное имя класса в TEST_CLASS'
+                        if (!params.TEST_CLASS?.trim()) {
+                            error 'Enter TEST_CLASS'
                         }
 
-                        if (!(params.TEST_METHOD ==~
-                                /[A-Za-z_$][A-Za-z0-9_$]*/)) {
-                            error 'Укажи корректное имя метода в TEST_METHOD'
+                        if (!params.TEST_METHOD?.trim()) {
+                            error 'Enter TEST_METHOD'
                         }
 
-                        testFilter =
-                            "${params.TEST_CLASS}#${params.TEST_METHOD}"
+                        testFilter = params.TEST_CLASS.trim() +
+                            '#' + params.TEST_METHOD.trim()
+                    }
+
+                    def command = 'mvn -B clean test ' +
+                        '-Dsurefire.rerunFailingTestsCount=1'
+
+                    if (testFilter) {
+                        command += ' "-Dtest=' + testFilter + '"'
                     }
 
                     if (isUnix()) {
-                        def command = 'mvn -B clean test ' +
-                            '-Dsurefire.rerunFailingTestsCount=1'
-
-                        if (testFilter) {
-                            command += " '-Dtest=${testFilter}'"
-                        }
-
                         sh command
                     } else {
-                        def command = 'mvn -B clean test ' +
-                            '-Dsurefire.rerunFailingTestsCount=1'
-
-                        if (testFilter) {
-                            command += " \"-Dtest=${testFilter}\""
-                        }
-
                         bat command
                     }
                 }
@@ -100,11 +90,11 @@ pipeline {
         }
 
         success {
-            echo 'Тестирование завершено успешно.'
+            echo 'Tests completed successfully.'
         }
 
         failure {
-            echo 'Сборка завершилась с ошибкой. Проверь Console Output и отчёт тестов.'
+            echo 'Tests failed. Check Console Output and Surefire reports.'
         }
     }
 }
