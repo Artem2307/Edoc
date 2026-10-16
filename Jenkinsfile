@@ -103,4 +103,3 @@ pipeline {
             echo 'Tests failed. Check Console Output and Surefire reports.'
         }
     }
-}
