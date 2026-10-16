@@ -83,11 +83,17 @@ pipeline {
                 skipPublishingChecks: true
             )
 
+            allure([
+                    includeProperties: false,
+                    results: [[path: 'target/allure-results']]
+                ])
+
             archiveArtifacts(
                 artifacts: 'target/surefire-reports/**',
                 allowEmptyArchive: true
             )
         }
+    }
 
         success {
             echo 'Tests completed successfully.'
