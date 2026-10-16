@@ -21,7 +21,7 @@
         <allure-maven.version>2.12.0</allure-maven.version>
         <selenide.version>6.19.1</selenide.version>
         <slf4j.version>2.0.18</slf4j.version>
-        <lombok.version>1.18.32</lombok.version>
+        <lombok.version>1.18.42</lombok.version>
     </properties>
 
 
