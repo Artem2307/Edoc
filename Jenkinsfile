@@ -55,11 +55,11 @@ pipeline {
                         }
 
                         testFilter = params.TEST_CLASS.trim() +
-                            '#' + params.TEST_METHOD.trim()
+                        '#' + params.TEST_METHOD.trim()
                     }
 
                     def command = 'mvn -B clean test ' +
-                        '-Dsurefire.rerunFailingTestsCount=1'
+                    '-Dsurefire.rerunFailingTestsCount=1'
 
                     if (testFilter) {
                         command += ' "-Dtest=' + testFilter + '"'
@@ -93,7 +93,6 @@ pipeline {
                 allowEmptyArchive: true
             )
         }
-    }
 
         success {
             echo 'Tests completed successfully.'
@@ -103,3 +102,4 @@ pipeline {
             echo 'Tests failed. Check Console Output and Surefire reports.'
         }
     }
+}
