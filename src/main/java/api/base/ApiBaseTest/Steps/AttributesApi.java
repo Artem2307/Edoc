@@ -5,13 +5,12 @@ import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static io.restassured.RestAssured.given;
 
 public class AttributesApi {
+    public final List<String> createdAttributeIds = new ArrayList<>();
 
     private static final String BASE_URL = "https://v2.edoc.dev/api";
 
@@ -91,20 +90,35 @@ public class AttributesApi {
     }
 
     /**
+     * Базовая валидация ответа (HTTP статус и поле status в теле).
+     */
+    private void validateBaseResponse(Response response, int expectedStatus, String expectedStatusField) {
+        System.out.println(response.getBody().asPrettyString());
+        Assertions.assertEquals(expectedStatus, response.getStatusCode(),
+                "Ожидался HTTP статус " + expectedStatus + ", но был: " + response.getStatusCode());
+
+        String statusField = response.jsonPath().getString("status");
+        Assertions.assertNotNull(statusField, "Поле status отсутствует в ответе");
+        Assertions.assertEquals(expectedStatusField, statusField,
+                "Ожидался статус в теле: " + expectedStatusField);
+
+        if (expectedStatus != 200) {
+            if (response.jsonPath().get("result.message") != null) {
+                Assertions.assertNotNull(response.jsonPath().getString("result.message"), "Сообщение об ошибке не должно быть пустым");
+            }
+        }
+    }
+
+    /**
      * Валидация ответа получения атрибутов.
      */
     @Step("Проверка получения списка атрибутов")
     public void validateAttributes(String token, Map<String, ?> queryParams, int expectedStatus, String expectedStatusField) {
         Response response = getAttributes(token, queryParams);
-
-        System.out.println(response.getBody().asPrettyString());
-        Assertions.assertEquals(expectedStatus, response.getStatusCode(),
-                "Ожидался HTTP статус " + expectedStatus + ", но был: " + response.getStatusCode());
+        validateBaseResponse(response, expectedStatus, expectedStatusField);
 
         if (expectedStatus == 200) {
             AttributesResponse attributesResponse = response.getBody().as(AttributesResponse.class);
-            Assertions.assertEquals(expectedStatusField, attributesResponse.getStatus(), "Ожидался статус в теле: " + expectedStatusField);
-            
             AttributesResponse.Result result = attributesResponse.getResult();
             Assertions.assertNotNull(result, "Результат (result) отсутствует в ответе");
             Assertions.assertNotNull(result.getList(), "Список атрибутов (result.list) отсутствует в ответе");
@@ -119,14 +133,6 @@ public class AttributesApi {
                     Assertions.assertFalse(attribute.getTitle().isEmpty(), "Название атрибута не должно быть пустым");
                 }
             }
-        } else {
-            String statusField = response.jsonPath().getString("status");
-            Assertions.assertNotNull(statusField, "Поле status отсутствует в ответе");
-            Assertions.assertEquals(expectedStatusField, statusField, "Ожидался статус " + expectedStatusField + " для кода " + expectedStatus);
-
-            if (response.jsonPath().get("result.message") != null) {
-                Assertions.assertNotNull(response.jsonPath().getString("result.message"), "Сообщение об ошибке не должно быть пустым");
-            }
         }
     }
 
@@ -136,22 +142,11 @@ public class AttributesApi {
     @Step("Проверка создания атрибута")
     public Response validateCreateAttribute(String token, Map<String, Object> body, int expectedStatus, String expectedStatusField) {
         Response response = createAttribute(token, body);
-        System.out.println(response.getBody().asPrettyString());
-        Assertions.assertEquals(expectedStatus, response.getStatusCode(),
-                "Ожидался HTTP статус " + expectedStatus + ", но был: " + response.getStatusCode());
-
-        String statusField = response.jsonPath().getString("status");
-        
-        Assertions.assertEquals(expectedStatusField, statusField,
-                "Ожидался статус в теле: " + expectedStatusField);
+        validateBaseResponse(response, expectedStatus, expectedStatusField);
 
         if (expectedStatus == 200) {
             Assertions.assertNotNull(response.jsonPath().getString("result.id"), "ID созданного атрибута отсутствует");
             Assertions.assertEquals(body.get("title"), response.jsonPath().getString("result.title"), "Title не совпадает");
-        } else {
-            if (response.jsonPath().get("result.message") != null) {
-                Assertions.assertNotNull(response.jsonPath().getString("result.message"), "Сообщение об ошибке не должно быть пустым");
-            }
         }
         return response;
     }
@@ -162,21 +157,12 @@ public class AttributesApi {
     @Step("Проверка обновления атрибута")
     public void validatePatchAttribute(String token, String attributeId, Map<String, Object> body, int expectedStatus, String expectedStatusField) {
         Response response = patchAttribute(token, attributeId, body);
-        System.out.println(response.getBody().asPrettyString());
-        Assertions.assertEquals(expectedStatus, response.getStatusCode(),
-                "Ожидался HTTP статус " + expectedStatus + ", но был: " + response.getStatusCode());
-
-        Assertions.assertEquals(expectedStatusField, response.jsonPath().getString("status"),
-                "Ожидался статус в теле: " + expectedStatusField);
+        validateBaseResponse(response, expectedStatus, expectedStatusField);
 
         if (expectedStatus == 200) {
             Assertions.assertEquals(attributeId, response.jsonPath().getString("result.id"), "ID атрибута не совпадает");
             if (body.containsKey("title")) {
                 Assertions.assertEquals(body.get("title"), response.jsonPath().getString("result.title"), "Title не обновился");
-            }
-        } else {
-            if (response.jsonPath().get("result.message") != null) {
-                Assertions.assertNotNull(response.jsonPath().getString("result.message"), "Сообщение об ошибке не должно быть пустым");
             }
         }
     }
@@ -187,19 +173,10 @@ public class AttributesApi {
     @Step("Проверка удаления атрибута")
     public void validateDeleteAttribute(String token, String attributeId, int expectedStatus, String expectedStatusField) {
         Response response = deleteAttribute(token, attributeId);
-        System.out.println(response.getBody().asPrettyString());
-        Assertions.assertEquals(expectedStatus, response.getStatusCode(),
-                "Ожидался HTTP статус " + expectedStatus + ", но был: " + response.getStatusCode());
-
-        Assertions.assertEquals(expectedStatusField, response.jsonPath().getString("status"),
-                "Ожидался статус в теле: " + expectedStatusField);
+        validateBaseResponse(response, expectedStatus, expectedStatusField);
 
         if (expectedStatus == 200) {
             Assertions.assertTrue(response.jsonPath().getBoolean("result.success"), "Success должен быть true");
-        } else {
-            if (response.jsonPath().get("result.message") != null) {
-                Assertions.assertNotNull(response.jsonPath().getString("result.message"), "Сообщение об ошибке не должно быть пустым");
-            }
         }
     }
 
@@ -209,12 +186,7 @@ public class AttributesApi {
     @Step("Проверка получения атрибута по ID")
     public Response validateGetAttributeById(String token, String attributeId, int expectedStatus, String expectedStatusField) {
         Response response = getAttributeById(token, attributeId);
-        System.out.println(response.getBody().asPrettyString());
-        Assertions.assertEquals(expectedStatus, response.getStatusCode(),
-                "Ожидался HTTP статус " + expectedStatus + ", но был: " + response.getStatusCode());
-
-        Assertions.assertEquals(expectedStatusField, response.jsonPath().getString("status"),
-                "Ожидался статус в теле: " + expectedStatusField);
+        validateBaseResponse(response, expectedStatus, expectedStatusField);
 
         if (expectedStatus == 200) {
             Assertions.assertEquals(attributeId, response.jsonPath().getString("result.id"), "ID атрибута не совпадает");
@@ -222,6 +194,40 @@ public class AttributesApi {
         return response;
     }
 
+    /**
+     * Проверка наличия или отсутствия атрибута в списке.
+     */
+    @Step("Проверка наличия атрибута в списке")
+    public void verifyAttributeInList(String token, String attributeId, String expectedTitle, boolean shouldBePresent) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("page", 0);
+        params.put("limit", 100);
+        Response response = getAttributes(token, params);
+        Assertions.assertEquals(200, response.getStatusCode(), "Не удалось получить список атрибутов для проверки");
+
+        var list = response.jsonPath().getList("result.list", Map.class);
+        boolean found = false;
+        for (Map item : list) {
+            if (attributeId.equals(item.get("id").toString())) {
+                found = true;
+                if (shouldBePresent && expectedTitle != null) {
+                    Assertions.assertEquals(expectedTitle, item.get("title"), "Title не совпадает в списке");
+                }
+                break;
+            }
+        }
+
+        if (shouldBePresent) {
+            Assertions.assertTrue(found, "Атрибут с ID " + attributeId + " не найден в списке");
+        } else {
+            Assertions.assertFalse(found, "Атрибут с ID " + attributeId + " все еще присутствует в списке");
+        }
+    }
+
+    /**
+     * Получает ID типа атрибута по его псевдониму (alias).
+     * Если тип с указанным alias не найден, возвращает первый доступный тип.
+     */
     public String getTypeId(String token, AttributeTypesApi attributeTypesApi) {
         Response response = attributeTypesApi.getAttributeTypes(token);
         Assertions.assertEquals(200, response.getStatusCode(), "Не вдалося отримати типи атрибутів");
@@ -239,6 +245,19 @@ public class AttributesApi {
         return typeId;
     }
 
+    /**
+     * Создает тестовый атрибут, регистрирует его для очистки и возвращает его ID.
+     */
+    public String createTestAttribute(String token, AttributeTypesApi attributeTypesApi) {
+        String typeId = getTypeId(token, attributeTypesApi);
+        String attributeId = createTestAttribute(token, typeId);
+        createdAttributeIds.add(attributeId);
+        return attributeId;
+    }
+
+    /**
+     * Создает тестовый атрибут по указанному ID типа и возвращает его ID.
+     */
     public String createTestAttribute(String token, String typeId) {
         String title = "Test Attribute " + UUID.randomUUID();
         Map<String, Object> createBody = new HashMap<>();
