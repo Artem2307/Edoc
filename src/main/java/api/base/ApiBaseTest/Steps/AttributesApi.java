@@ -102,11 +102,7 @@ public class AttributesApi {
                 "Ожидался HTTP статус " + expectedStatus + ", но был: " + response.getStatusCode());
 
         if (expectedStatus == 200) {
-            String bodyString = response.getBody().asString();
-            // Replace "data": [] with "data": null if it is an empty array to avoid Jackson error when expecting a Map
-            String modifiedBody = bodyString.replace("\"data\":[]", "\"data\":null");
-            
-            AttributesResponse attributesResponse = io.restassured.path.json.JsonPath.from(modifiedBody).getObject("", AttributesResponse.class);
+            AttributesResponse attributesResponse = response.getBody().as(AttributesResponse.class);
             Assertions.assertEquals(expectedStatusField, attributesResponse.getStatus(), "Ожидался статус в теле: " + expectedStatusField);
             
             AttributesResponse.Result result = attributesResponse.getResult();
@@ -125,7 +121,8 @@ public class AttributesApi {
             }
         } else {
             String statusField = response.jsonPath().getString("status");
-            Assertions.assertEquals("failure", statusField, "Ожидался статус failure для кода " + expectedStatus);
+            Assertions.assertNotNull(statusField, "Поле status отсутствует в ответе");
+            Assertions.assertEquals(expectedStatusField, statusField, "Ожидался статус " + expectedStatusField + " для кода " + expectedStatus);
 
             if (response.jsonPath().get("result.message") != null) {
                 Assertions.assertNotNull(response.jsonPath().getString("result.message"), "Сообщение об ошибке не должно быть пустым");
@@ -143,7 +140,9 @@ public class AttributesApi {
         Assertions.assertEquals(expectedStatus, response.getStatusCode(),
                 "Ожидался HTTP статус " + expectedStatus + ", но был: " + response.getStatusCode());
 
-        Assertions.assertEquals(expectedStatusField, response.jsonPath().getString("status"),
+        String statusField = response.jsonPath().getString("status");
+        
+        Assertions.assertEquals(expectedStatusField, statusField,
                 "Ожидался статус в теле: " + expectedStatusField);
 
         if (expectedStatus == 200) {
@@ -224,9 +223,19 @@ public class AttributesApi {
     }
 
     public String getTypeId(String token, AttributeTypesApi attributeTypesApi) {
-        Response typeResponse = attributeTypesApi.getAttributeTypes(token);
-        String typeId = typeResponse.jsonPath().getString("result.list[0].id");
-        Assertions.assertNotNull(typeId, "Не вдалося отримати ID типу атрибута");
+        Response response = attributeTypesApi.getAttributeTypes(token);
+        Assertions.assertEquals(200, response.getStatusCode(), "Не вдалося отримати типи атрибутів");
+        
+        String statusField = response.jsonPath().getString("status");
+        Assertions.assertEquals("success", statusField, "Статус відповіді не success");
+
+        // Шукаємо тип 'string', який зазвичай є в системі. Якщо ні - беремо перший.
+        String typeId = response.jsonPath().getString("result.list.find { it.alias == 'string' }.id");
+        if (typeId == null) {
+            typeId = response.jsonPath().getString("result.list[0].id");
+        }
+        
+        Assertions.assertNotNull(typeId, "Не вдалося знайти ID типу атрибута");
         return typeId;
     }
 

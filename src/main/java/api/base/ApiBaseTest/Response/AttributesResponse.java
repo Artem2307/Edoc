@@ -21,7 +21,7 @@ public class AttributesResponse {
             private UUID id;
             private String title;
             private Type type;
-            private Map<String, Object> data;
+            private Object data;
             private boolean mandatory;
             private Object value;
 
