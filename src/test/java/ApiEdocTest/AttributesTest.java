@@ -51,13 +51,13 @@ public class AttributesTest extends BaseApiTest {
     @Test
     @DisplayName("Сценарій 23: Створення атрибута")
     public void testCreateAttribute() {
-        attributesApi.createTestAttribute(validToken, attributeTypesApi);
+        attributesApi.createTestAttribute(validToken);
     }
 
     @Test
     @DisplayName("Сценарій 24: Оновлення атрибута")
     public void testUpdateAttribute() {
-        String attributeId = attributesApi.createTestAttribute(validToken, attributeTypesApi);
+        String attributeId = attributesApi.createTestAttribute(validToken);
 
         String newTitle = "Updated Test Attribute " + UUID.randomUUID();
         Map<String, Object> patchBody = new HashMap<>();
@@ -70,7 +70,7 @@ public class AttributesTest extends BaseApiTest {
     @Test
     @DisplayName("Сценарій 25: Видалення атрибута")
     public void testDeleteAttribute() {
-        String attributeId = attributesApi.createTestAttribute(validToken, attributeTypesApi);
+        String attributeId = attributesApi.createTestAttribute(validToken);
 
         attributesApi.validateDeleteAttribute(validToken, attributeId, 200, "success");
         attributesApi.verifyAttributeInList(validToken, attributeId, null, false);
@@ -80,7 +80,7 @@ public class AttributesTest extends BaseApiTest {
     @Test
     @DisplayName("Сценарій 26: Помилка 401 при створенні атрибута (неавторизований)")
     public void testCreateAttributeUnauthorized() {
-        String typeId = attributesApi.getTypeId(validToken, attributeTypesApi);
+        String typeId = attributesApi.getTypeId(validToken);
         Map<String, Object> body = new HashMap<>();
         body.put("title", "Unauthorized Test");
         body.put("type", typeId);
@@ -91,10 +91,9 @@ public class AttributesTest extends BaseApiTest {
     @Test
     @DisplayName("Сценарій 27: Помилка 400 при створенні атрибута (невалідні дані)")
     public void testCreateAttributeInvalidData() {
-        String typeId = attributesApi.getTypeId(validToken, attributeTypesApi);
         Map<String, Object> invalidBody = new HashMap<>();
-        invalidBody.put("title", "");
-        invalidBody.put("type", typeId);
+        invalidBody.put("title", "Valid Title");
+        invalidBody.put("type", "invalid-uuid");
         invalidBody.put("data", new HashMap<>());
         attributesApi.validateCreateAttribute(validToken, invalidBody, 400, "failure");
     }
@@ -118,7 +117,7 @@ public class AttributesTest extends BaseApiTest {
     @Test
     @DisplayName("Сценарій 30: Помилка 401 при оновленні атрибута (неавторизований)")
     public void testUpdateAttributeUnauthorized() {
-        String attributeId = attributesApi.createTestAttribute(validToken, attributeTypesApi);
+        String attributeId = attributesApi.createTestAttribute(validToken);
         Map<String, Object> patchBody = new HashMap<>();
         patchBody.put("title", "Unauthorized Update");
         attributesApi.validatePatchAttribute("invalid_token", attributeId, patchBody, 401, "failure");
@@ -127,7 +126,7 @@ public class AttributesTest extends BaseApiTest {
     @Test
     @DisplayName("Сценарій 31: Помилка 401 при видаленні атрибута (неавторизований)")
     public void testDeleteAttributeUnauthorized() {
-        String attributeId = attributesApi.createTestAttribute(validToken, attributeTypesApi);
+        String attributeId = attributesApi.createTestAttribute(validToken);
         attributesApi.validateDeleteAttribute("invalid_token", attributeId, 401, "failure");
     }
 

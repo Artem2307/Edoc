@@ -22,7 +22,7 @@ public class AttributesResponse {
             private String title;
             private Type type;
             private Object data;
-            private boolean mandatory;
+            private Boolean mandatory;
             private Object value;
 
             @Data

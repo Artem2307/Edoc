@@ -62,4 +62,15 @@ public class AttributeTypesApi {
             }
         }
     }
+
+    /**
+     * Получает ID первого доступного типа атрибута.
+     */
+    public String getTypeId(String token) {
+        Response response = getAttributeTypes(token);
+        Assertions.assertEquals(200, response.getStatusCode(), "Не удалось получить типы атрибутов");
+        String typeId = response.jsonPath().getString("result.list[0].id");
+        Assertions.assertNotNull(typeId, "Список типов атрибутов пуст");
+        return typeId;
+    }
 }

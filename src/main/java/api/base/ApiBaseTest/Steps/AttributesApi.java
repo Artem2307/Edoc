@@ -225,31 +225,17 @@ public class AttributesApi {
     }
 
     /**
-     * Получает ID типа атрибута по его псевдониму (alias).
-     * Если тип с указанным alias не найден, возвращает первый доступный тип.
+     * Получает ID первого доступного типа атрибута, используя AttributeTypesApi.
      */
-    public String getTypeId(String token, AttributeTypesApi attributeTypesApi) {
-        Response response = attributeTypesApi.getAttributeTypes(token);
-        Assertions.assertEquals(200, response.getStatusCode(), "Не вдалося отримати типи атрибутів");
-        
-        String statusField = response.jsonPath().getString("status");
-        Assertions.assertEquals("success", statusField, "Статус відповіді не success");
-
-        // Шукаємо тип 'string', який зазвичай є в системі. Якщо ні - беремо перший.
-        String typeId = response.jsonPath().getString("result.list.find { it.alias == 'string' }.id");
-        if (typeId == null) {
-            typeId = response.jsonPath().getString("result.list[0].id");
-        }
-        
-        Assertions.assertNotNull(typeId, "Не вдалося знайти ID типу атрибута");
-        return typeId;
+    public String getTypeId(String token) {
+        return new AttributeTypesApi().getTypeId(token);
     }
 
     /**
      * Создает тестовый атрибут, регистрирует его для очистки и возвращает его ID.
      */
-    public String createTestAttribute(String token, AttributeTypesApi attributeTypesApi) {
-        String typeId = getTypeId(token, attributeTypesApi);
+    public String createTestAttribute(String token) {
+        String typeId = getTypeId(token);
         String attributeId = createTestAttribute(token, typeId);
         createdAttributeIds.add(attributeId);
         return attributeId;
