@@ -29,6 +29,52 @@ public class AttributesApi {
     }
 
     /**
+     * Выполняет POST-запрос на создание атрибута.
+     */
+    public Response createAttribute(String token, Map<String, Object> body) {
+        return given()
+                .baseUri(BASE_URL)
+                .basePath("/attributes")
+                .header("Authorization", "Bearer " + token)
+                .header("accept", "application/json")
+                .header("Content-Type", "application/json")
+                .body(body)
+                .when()
+                .post()
+                .thenReturn();
+    }
+
+    /**
+     * Выполняет DELETE-запрос на удаление атрибута.
+     */
+    public Response deleteAttribute(String token, String attributeId) {
+        return given()
+                .baseUri(BASE_URL)
+                .basePath("/attributes/" + attributeId)
+                .header("Authorization", "Bearer " + token)
+                .header("accept", "application/json")
+                .when()
+                .delete()
+                .thenReturn();
+    }
+
+    /**
+     * Выполняет PATCH-запрос на обновление атрибута.
+     */
+    public Response patchAttribute(String token, String attributeId, Map<String, Object> body) {
+        return given()
+                .baseUri(BASE_URL)
+                .basePath("/attributes/" + attributeId)
+                .header("Authorization", "Bearer " + token)
+                .header("accept", "application/json")
+                .header("Content-Type", "application/json")
+                .body(body)
+                .when()
+                .patch()
+                .thenReturn();
+    }
+
+    /**
      * Валидация ответа получения атрибутов.
      */
     @Step("Проверка получения списка атрибутов")
@@ -40,7 +86,11 @@ public class AttributesApi {
                 "Ожидался HTTP статус " + expectedStatus + ", но был: " + response.getStatusCode());
 
         if (expectedStatus == 200) {
-            AttributesResponse attributesResponse = response.getBody().as(AttributesResponse.class);
+            String bodyString = response.getBody().asString();
+            // Replace "data": [] with "data": null if it is an empty array to avoid Jackson error when expecting a Map
+            String modifiedBody = bodyString.replace("\"data\":[]", "\"data\":null");
+            
+            AttributesResponse attributesResponse = io.restassured.path.json.JsonPath.from(modifiedBody).getObject("", AttributesResponse.class);
             Assertions.assertEquals(expectedStatusField, attributesResponse.getStatus(), "Ожидался статус в теле: " + expectedStatusField);
             
             AttributesResponse.Result result = attributesResponse.getResult();
@@ -61,6 +111,77 @@ public class AttributesApi {
             String statusField = response.jsonPath().getString("status");
             Assertions.assertEquals("failure", statusField, "Ожидался статус failure для кода " + expectedStatus);
 
+            if (response.jsonPath().get("result.message") != null) {
+                Assertions.assertNotNull(response.jsonPath().getString("result.message"), "Сообщение об ошибке не должно быть пустым");
+            }
+        }
+    }
+
+    /**
+     * Валидация создания атрибута.
+     */
+    @Step("Проверка создания атрибута")
+    public Response validateCreateAttribute(String token, Map<String, Object> body, int expectedStatus, String expectedStatusField) {
+        Response response = createAttribute(token, body);
+        System.out.println(response.getBody().asPrettyString());
+        Assertions.assertEquals(expectedStatus, response.getStatusCode(),
+                "Ожидался HTTP статус " + expectedStatus + ", но был: " + response.getStatusCode());
+
+        Assertions.assertEquals(expectedStatusField, response.jsonPath().getString("status"),
+                "Ожидался статус в теле: " + expectedStatusField);
+
+        if (expectedStatus == 200) {
+            Assertions.assertNotNull(response.jsonPath().getString("result.id"), "ID созданного атрибута отсутствует");
+            Assertions.assertEquals(body.get("title"), response.jsonPath().getString("result.title"), "Title не совпадает");
+        } else {
+            if (response.jsonPath().get("result.message") != null) {
+                Assertions.assertNotNull(response.jsonPath().getString("result.message"), "Сообщение об ошибке не должно быть пустым");
+            }
+        }
+        return response;
+    }
+
+    /**
+     * Валидация обновления атрибута.
+     */
+    @Step("Проверка обновления атрибута")
+    public void validatePatchAttribute(String token, String attributeId, Map<String, Object> body, int expectedStatus, String expectedStatusField) {
+        Response response = patchAttribute(token, attributeId, body);
+        System.out.println(response.getBody().asPrettyString());
+        Assertions.assertEquals(expectedStatus, response.getStatusCode(),
+                "Ожидался HTTP статус " + expectedStatus + ", но был: " + response.getStatusCode());
+
+        Assertions.assertEquals(expectedStatusField, response.jsonPath().getString("status"),
+                "Ожидался статус в теле: " + expectedStatusField);
+
+        if (expectedStatus == 200) {
+            Assertions.assertEquals(attributeId, response.jsonPath().getString("result.id"), "ID атрибута не совпадает");
+            if (body.containsKey("title")) {
+                Assertions.assertEquals(body.get("title"), response.jsonPath().getString("result.title"), "Title не обновился");
+            }
+        } else {
+            if (response.jsonPath().get("result.message") != null) {
+                Assertions.assertNotNull(response.jsonPath().getString("result.message"), "Сообщение об ошибке не должно быть пустым");
+            }
+        }
+    }
+
+    /**
+     * Валидация удаления атрибута.
+     */
+    @Step("Проверка удаления атрибута")
+    public void validateDeleteAttribute(String token, String attributeId, int expectedStatus, String expectedStatusField) {
+        Response response = deleteAttribute(token, attributeId);
+        System.out.println(response.getBody().asPrettyString());
+        Assertions.assertEquals(expectedStatus, response.getStatusCode(),
+                "Ожидался HTTP статус " + expectedStatus + ", но был: " + response.getStatusCode());
+
+        Assertions.assertEquals(expectedStatusField, response.jsonPath().getString("status"),
+                "Ожидался статус в теле: " + expectedStatusField);
+
+        if (expectedStatus == 200) {
+            Assertions.assertTrue(response.jsonPath().getBoolean("result.success"), "Success должен быть true");
+        } else {
             if (response.jsonPath().get("result.message") != null) {
                 Assertions.assertNotNull(response.jsonPath().getString("result.message"), "Сообщение об ошибке не должно быть пустым");
             }
