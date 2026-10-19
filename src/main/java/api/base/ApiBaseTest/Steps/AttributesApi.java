@@ -5,7 +5,9 @@ import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 
@@ -71,6 +73,20 @@ public class AttributesApi {
                 .body(body)
                 .when()
                 .patch()
+                .thenReturn();
+    }
+
+    /**
+     * Выполняет GET-запрос на получение атрибута по ID.
+     */
+    public Response getAttributeById(String token, String attributeId) {
+        return given()
+                .baseUri(BASE_URL)
+                .basePath("/attributes/" + attributeId)
+                .header("Authorization", "Bearer " + token)
+                .header("accept", "application/json")
+                .when()
+                .get()
                 .thenReturn();
     }
 
@@ -186,5 +202,42 @@ public class AttributesApi {
                 Assertions.assertNotNull(response.jsonPath().getString("result.message"), "Сообщение об ошибке не должно быть пустым");
             }
         }
+    }
+
+    /**
+     * Валидация получения атрибута по ID.
+     */
+    @Step("Проверка получения атрибута по ID")
+    public Response validateGetAttributeById(String token, String attributeId, int expectedStatus, String expectedStatusField) {
+        Response response = getAttributeById(token, attributeId);
+        System.out.println(response.getBody().asPrettyString());
+        Assertions.assertEquals(expectedStatus, response.getStatusCode(),
+                "Ожидался HTTP статус " + expectedStatus + ", но был: " + response.getStatusCode());
+
+        Assertions.assertEquals(expectedStatusField, response.jsonPath().getString("status"),
+                "Ожидался статус в теле: " + expectedStatusField);
+
+        if (expectedStatus == 200) {
+            Assertions.assertEquals(attributeId, response.jsonPath().getString("result.id"), "ID атрибута не совпадает");
+        }
+        return response;
+    }
+
+    public String getTypeId(String token, AttributeTypesApi attributeTypesApi) {
+        Response typeResponse = attributeTypesApi.getAttributeTypes(token);
+        String typeId = typeResponse.jsonPath().getString("result.list[0].id");
+        Assertions.assertNotNull(typeId, "Не вдалося отримати ID типу атрибута");
+        return typeId;
+    }
+
+    public String createTestAttribute(String token, String typeId) {
+        String title = "Test Attribute " + UUID.randomUUID();
+        Map<String, Object> createBody = new HashMap<>();
+        createBody.put("title", title);
+        createBody.put("type", typeId);
+        createBody.put("data", new HashMap<>());
+
+        Response createResponse = validateCreateAttribute(token, createBody, 200, "success");
+        return createResponse.jsonPath().getString("result.id");
     }
 }

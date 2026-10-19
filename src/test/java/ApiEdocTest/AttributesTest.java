@@ -54,15 +54,15 @@ public class AttributesTest extends BaseApiTest {
     @Test
     @DisplayName("Сценарій 23: Створення атрибута")
     public void testCreateAttribute() {
-        String typeId = getTypeId();
-        createTestAttribute(typeId);
+        String typeId = attributesApi.getTypeId(validToken, attributeTypesApi);
+        attributesApi.createTestAttribute(validToken, typeId);
     }
 
     @Test
     @DisplayName("Сценарій 24: Оновлення атрибута")
     public void testUpdateAttribute() {
-        String typeId = getTypeId();
-        String attributeId = createTestAttribute(typeId);
+        String typeId = attributesApi.getTypeId(validToken, attributeTypesApi);
+        String attributeId = attributesApi.createTestAttribute(validToken, typeId);
 
         String newTitle = "Updated Test Attribute " + UUID.randomUUID();
         Map<String, Object> patchBody = new HashMap<>();
@@ -70,15 +70,46 @@ public class AttributesTest extends BaseApiTest {
         patchBody.put("data", new HashMap<>());
 
         attributesApi.validatePatchAttribute(validToken, attributeId, patchBody, 200, "success");
+
+        // Verify update via list
+        Map<String, Object> params = new HashMap<>();
+        params.put("page", 0);
+        params.put("limit", 100);
+        Response getResponse = attributesApi.getAttributes(validToken, params);
+        String bodyString = getResponse.getBody().asString().replace("\"data\":[]", "\"data\":null");
+        
+        boolean found = false;
+        var list = io.restassured.path.json.JsonPath.from(bodyString).getList("result.list", Map.class);
+        for (Map item : list) {
+            if (attributeId.equals(item.get("id"))) {
+                Assertions.assertEquals(newTitle, item.get("title"), "Title не оновився в списку після PATCH");
+                found = true;
+                break;
+            }
+        }
+        Assertions.assertTrue(found, "Атрибут не знайдено в списку після оновлення");
     }
 
     @Test
     @DisplayName("Сценарій 25: Видалення атрибута")
     public void testDeleteAttribute() {
-        String typeId = getTypeId();
-        String attributeId = createTestAttribute(typeId);
+        String typeId = attributesApi.getTypeId(validToken, attributeTypesApi);
+        String attributeId = attributesApi.createTestAttribute(validToken, typeId);
 
         attributesApi.validateDeleteAttribute(validToken, attributeId, 200, "success");
+        
+        // Verify deletion via list
+        Map<String, Object> params = new HashMap<>();
+        params.put("page", 0);
+        params.put("limit", 100);
+        Response getResponse = attributesApi.getAttributes(validToken, params);
+        String bodyString = getResponse.getBody().asString().replace("\"data\":[]", "\"data\":null");
+        
+        var list = io.restassured.path.json.JsonPath.from(bodyString).getList("result.list", Map.class);
+        for (Map item : list) {
+            Assertions.assertNotEquals(attributeId, item.get("id"), "Атрибут все ще присутній у списку після видалення");
+        }
+
         attributesApi.validateDeleteAttribute(validToken, attributeId, 404, "failure");
     }
 
@@ -93,12 +124,12 @@ public class AttributesTest extends BaseApiTest {
     }
 
     @Test
-    @DisplayName("Сценарій 27: Помилка 500 при створенні атрибута (невалідні дані)")
+    @DisplayName("Сценарій 27: Помилка 400 при створенні атрибута (невалідні дані)")
     public void testCreateAttributeInvalidData() {
         Map<String, Object> invalidBody = new HashMap<>();
         invalidBody.put("type", UUID.randomUUID().toString());
         invalidBody.put("data", new HashMap<>());
-        attributesApi.validateCreateAttribute(validToken, invalidBody, 500, "failure");
+        attributesApi.validateCreateAttribute(validToken, invalidBody, 400, "failure");
     }
 
     @Test
@@ -131,23 +162,5 @@ public class AttributesTest extends BaseApiTest {
     public void testDeleteAttributeUnauthorized() {
         String nonExistentId = UUID.randomUUID().toString();
         attributesApi.validateDeleteAttribute("invalid_token", nonExistentId, 401, "failure");
-    }
-
-    private String getTypeId() {
-        Response typeResponse = attributeTypesApi.getAttributeTypes(validToken);
-        String typeId = typeResponse.jsonPath().getString("result.list[0].id");
-        Assertions.assertNotNull(typeId, "Не вдалося отримати ID типу атрибута");
-        return typeId;
-    }
-
-    private String createTestAttribute(String typeId) {
-        String title = "Test Attribute " + UUID.randomUUID();
-        Map<String, Object> createBody = new HashMap<>();
-        createBody.put("title", title);
-        createBody.put("type", typeId);
-        createBody.put("data", new HashMap<>());
-
-        Response createResponse = attributesApi.validateCreateAttribute(validToken, createBody, 200, "success");
-        return createResponse.jsonPath().getString("result.id");
     }
 }
